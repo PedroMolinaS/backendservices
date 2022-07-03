@@ -23,4 +23,9 @@ const ServicioSchema = Schema({
     }
 })
 
+ServicioSchema.methods.toJSON = function(){
+    const {__v, estado, ...servicios} = this.toObject()
+    return servicios
+}
+
 module.exports = model('Servicio', ServicioSchema)

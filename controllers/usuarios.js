@@ -21,12 +21,6 @@ const usuariosPost = async (req, res = response) => {
 
     const usuario = new Usuario({nombre, correo, password, rol, google})
 
-    // consulto si correo existe:
-    const existeCorreo = await Usuario.findOne({correo : correo})
-    if(existeCorreo){
-        return res.status(400).json({ok: false, msg: 'Correo ya existe'})
-    }
-
     // Encriptando la contraseña:
     const salt = bcryptjs.genSaltSync()
     usuario.password = bcryptjs.hashSync(password,salt)
@@ -40,18 +34,20 @@ const usuariosPost = async (req, res = response) => {
     })
 }
 
-const usuariosPut = async (req, res = response) => {
+const usuariosPut = async (req=request, res = response) => {
 
     const {id} = req.params
-    const usuario = await Usuario.findOne({id})
-    const {nombre, apellido, edad} = req.body
+    const {_id, password, google,...resto} = req.body
 
-    // Actualizando:
-    usuario.nombre = nombre
-    usuario.apellido = apellido
-    usuario.edad = edad
+    // TODO para validar contra BD: 
+    
+    if(password){
+        const salt = bcryptjs.genSaltSync()
+        resto.password = bcryptjs.hashSync(password, salt)
+    }
 
-    usuario.save()
+    const usuario = await Usuario.findByIdAndUpdate(id, resto)
+
     res.status(201).json({
         ok: true,
         msg: 'conforme PUT',
@@ -59,7 +55,11 @@ const usuariosPut = async (req, res = response) => {
     })
 }
 
-const usuariosDelete = (req, res = response) => {
+const usuariosDelete = async (req, res = response) => {
+
+    const {id} = req.params
+    
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
 
     res.status(200).json({
         ok: true,

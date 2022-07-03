@@ -32,13 +32,6 @@ const servicioPost = async (req, res = response) => {
 
     const { grupo, nombre, descripcion, img = "", estado } = req.body
 
-        // consulto si el servicio existe:
-        const existeNombre = await Servicio.findOne({nombre : nombre})
-        if(existeNombre){
-            return res.status(400).json({ok: false, msg: 'El servicio ya existe'})
-        }
-    
-
     const servicio = new Servicio({ grupo,nombre, descripcion, img, estado })
 
     // Encriptando la contraseña:
@@ -57,29 +50,23 @@ const servicioPost = async (req, res = response) => {
 const servicioPut = async (req, res = response) => {
 
     const { id } = req.params
-    const servicio = await Servicio.findOne({ id })
-    const { nombre, descripcion } = req.body
+    const {_id, ...resto} = req.body
+    const servicio = await Servicio.findByIdAndUpdate(id, resto)
 
-    // Actualizando:
-    servicio.nombre = nombre
-    servicio.descripcion = descripcion
-
-    servicio.save()
     res.status(201).json({
         ok: true,
         msg: 'conforme PUT',
-        id, servicio
+        servicio
     })
 }
 
 const servicioDelete = async (req, res = response) => {
 
     const { id } = req.params
-    const servicio = await Servicio.findOne({ id })
-    // Actualizando:
-    servicio.estado = false
 
-    res.status(200).json({
+    const servicio = await Servicio.findByIdAndUpdate(id, {estado: false})
+
+    res.status(201).json({
         ok: true,
         msg: 'conforme Delete'
     })
