@@ -26,7 +26,11 @@ router.put('/:id',[
     validarCamposServicio
 ], servicioPut)
 
-router.delete('/:id', servicioDelete)
+router.delete('/:id', [
+    check('id', 'No es un ID de servicio valido').isMongoId(),
+    check('id').custom(servicioExisteById),
+    validarCamposServicio
+], servicioDelete)
 
 
 module.exports = router

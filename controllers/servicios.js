@@ -4,27 +4,49 @@ const Servicio = require('../models/servicio')
 // const {validationResult} = require('express-validator')
 // const bcryptjs = require('bcryptjs')
 
-const servicioGet = async (req, res = response) => {
+const servicioGet = async (req = request, res = response) => {
 
-    const servicio = await Servicio.find()
+    const { limite = 20, desde = 0 } = req.query
+
+    // const servicios = await Servicio.find({ estado: true })
+    //     .skip(Number(desde))
+    //     .limit(Number(limite))
+    // const total = await Servicio.countDocuments({ estado: true })
+
+    const [total, servicios] = await Promise.all([
+        Servicio.countDocuments({ estado: true }),
+        Servicio.find({ estado: true })
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ])
 
     res.status(200).json({
         ok: true,
-        msg: 'es un GET',
-        servicio
+        total,
+        servicios
     })
 }
 
-const servicioGetByGroup = async (req=request, res = response) => {
+const servicioGetByGroup = async (req = request, res = response) => {
 
-    // const query = req.query
+    const { limite = 20, desde = 0 } = req.query
     const { grupo } = req.params
-    const servicio = await Servicio.find({ grupo })
+    // const servicios = await Servicio.find({ grupo, estado: true })
+    //     .skip(Number(desde))
+    //     .limit(Number(limite))
+    // const total = await Servicio.countDocuments({ grupo, estado: true })
+
+    const [total, servicios] = await Promise.all([
+        Servicio.countDocuments({ grupo, estado: true }),
+        Servicio.find({ grupo, estado: true })
+        .skip(Number(desde))
+        .limit(Number(limite))
+    ])
 
     res.status(200).json({
         ok: true,
-        msg: 'es un GET de un grupo',
-        servicio
+        total,
+        servicios
     })
 }
 
@@ -32,7 +54,7 @@ const servicioPost = async (req, res = response) => {
 
     const { grupo, nombre, descripcion, img = "", estado } = req.body
 
-    const servicio = new Servicio({ grupo,nombre, descripcion, img, estado })
+    const servicio = new Servicio({ grupo, nombre, descripcion, img, estado })
 
     // Encriptando la contraseña:
     // const salt = bcryptjs.genSaltSync()
@@ -50,7 +72,7 @@ const servicioPost = async (req, res = response) => {
 const servicioPut = async (req, res = response) => {
 
     const { id } = req.params
-    const {_id, ...resto} = req.body
+    const { _id, ...resto } = req.body
     const servicio = await Servicio.findByIdAndUpdate(id, resto)
 
     res.status(201).json({
@@ -64,7 +86,7 @@ const servicioDelete = async (req, res = response) => {
 
     const { id } = req.params
 
-    const servicio = await Servicio.findByIdAndUpdate(id, {estado: false})
+    const servicio = await Servicio.findByIdAndUpdate(id, { estado: false })
 
     res.status(201).json({
         ok: true,

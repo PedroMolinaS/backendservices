@@ -11,9 +11,9 @@ const esRolValido = async (rol) => {
 }
 
 const emailExiste = async (correo) => {
-    existeCorreo = await Usuario.findOne({ correo: correo })
+    existeCorreo = await Usuario.findOne({ correo: correo, estado:true })
     if (existeCorreo) {
-        throw res.status(400).json({ ok: false, msg: 'Correo ya existe' })
+        throw new Error('Correo ya existe')
     }
 }
 const existeUsuarioById = async (id) => {
@@ -31,9 +31,10 @@ const esGrupoValido = async (grupo) => {
 }
 
 const servicioExiste = async (nombre) => {
-    const existeNombre = await Servicio.findOne({ nombre: nombre })
+    const existeNombre = await Servicio.findOne({ nombre: nombre, estado:true })
+    console.log({existeNombre})
     if (existeNombre) {
-        throw res.status(400).json({ ok: false, msg: 'El servicio ya existe' })
+        throw new Error('El servicio ya existe')
     }
 }
 

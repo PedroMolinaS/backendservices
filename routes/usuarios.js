@@ -24,7 +24,11 @@ router.put('/:id',[
     validarCamposUsuario
 ], usuariosPut)
 
-router.delete('/', usuariosDelete)
+router.delete('/:id',[
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(existeUsuarioById),
+    validarCamposUsuario
+], usuariosDelete)
 
 
 module.exports = router
