@@ -9,11 +9,11 @@ const ServicioSchema = Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es obligatorio'],
+        unique: true,
     },
     descripcion: {
         type: String,
-        required: [true, 'La descripcion es obligatoria'],
-        unique: true,
+        required: [true, 'La descripcion es obligatoria']
     },
     img: {
         type: String,

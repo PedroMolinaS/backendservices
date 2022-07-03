@@ -22,7 +22,7 @@ const usuariosPost = async (req, res = response) => {
     const usuario = new Usuario({nombre, correo, password, rol, google})
 
     // consulto si correo existe:
-    const existeCorreo = await Usuario.findOne({correo})
+    const existeCorreo = await Usuario.findOne({correo : correo})
     if(existeCorreo){
         return res.status(400).json({ok: false, msg: 'Correo ya existe'})
     }
