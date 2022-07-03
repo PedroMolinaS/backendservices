@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { check } = require('express-validator')
 const { validarCamposServicio } = require('../middlewares/validarCamposUsuario')
 const { servicioGet, servicioPost, servicioPut, servicioDelete, servicioGetByGroup } = require('../controllers/servicios')
-const { esGrupoValido, servicioExiste } = require('../helpers/db-validators')
+const { esGrupoValido, servicioExiste, servicioExisteById } = require('../helpers/db-validators')
 
 const router = Router()
 
@@ -20,6 +20,9 @@ router.post('/', [
 
 router.put('/:id',[
     check('id', 'No es un ID de servicio valido').isMongoId(),
+    check('id').custom(servicioExisteById),
+    check('descripcion', 'La descripcion es requerida').not().isEmpty(),
+    check('grupo').custom(esGrupoValido),
     validarCamposServicio
 ], servicioPut)
 

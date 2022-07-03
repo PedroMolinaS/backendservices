@@ -16,6 +16,12 @@ const emailExiste = async (correo) => {
         throw res.status(400).json({ ok: false, msg: 'Correo ya existe' })
     }
 }
+const existeUsuarioById = async (id) => {
+    existeUsuario = await Usuario.findById(id)
+    if (!existeUsuario) {
+        throw new Error('Usuario inválido')
+    }
+}
 
 const esGrupoValido = async (grupo) => {
     const existeGrupo = await Grupo.findOne({ grupo })
@@ -31,10 +37,20 @@ const servicioExiste = async (nombre) => {
     }
 }
 
+const servicioExisteById = async (id) => {
+    const existeNombreById = await Servicio.findById(id)
+    
+    if (!existeNombreById) {
+        throw new Error('Servicio Inválido')
+    }
+}
+
 
 module.exports = {
     esRolValido,
     emailExiste,
+    existeUsuarioById,
     esGrupoValido,
-    servicioExiste
+    servicioExiste,
+    servicioExisteById
 }
