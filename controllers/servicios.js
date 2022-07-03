@@ -32,6 +32,13 @@ const servicioPost = async (req, res = response) => {
 
     const { grupo, nombre, descripcion, img = "", estado } = req.body
 
+        // consulto si el servicio existe:
+        const existeNombre = await Servicio.findOne({nombre : nombre})
+        if(existeNombre){
+            return res.status(400).json({ok: false, msg: 'El servicio ya existe'})
+        }
+    
+
     const servicio = new Servicio({ grupo,nombre, descripcion, img, estado })
 
     // Encriptando la contraseña:

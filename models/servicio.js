@@ -1,6 +1,5 @@
 const { Schema, model } = require('mongoose')
 
-
 const ServicioSchema = Schema({
     grupo: {
         type: String,
