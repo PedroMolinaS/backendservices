@@ -1,8 +1,6 @@
 const { response } = require('express')
 const bcryptjs = require('bcryptjs')
 const Usuario = require('../models/usuario')
-const {validationResult} = require('express-validator')
-const Role = require('../models/role')
 
 const usuariosGet = async (req, res = response) => {
 
@@ -58,12 +56,24 @@ const usuariosPut = async (req=request, res = response) => {
 const usuariosDelete = async (req, res = response) => {
 
     const {id} = req.params
+    const usuarioAutenticado = req.usuario
     
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
 
+    if(!usuario){
+        return res.status(401).json({msg: 'Token inválido - usuario no existe'})
+    }
+
+    // Verificar si usuario autenticado esta activo
+    if(!usuario.estado){
+        return res.status(401).json({msg: 'Token inválido - estado usuario inactivo'})
+    }
+
     res.status(200).json({
         ok: true,
-        msg: 'conforme Delete'
+        msg: "conforme Delete",
+        usuario,
+        usuarioAutenticado
     })
 }
 

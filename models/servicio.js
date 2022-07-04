@@ -24,7 +24,8 @@ const ServicioSchema = Schema({
 })
 
 ServicioSchema.methods.toJSON = function(){
-    const {__v, estado, ...servicios} = this.toObject()
+    const {__v, estado,_id, ...servicios} = this.toObject()
+    servicios.idservicio = _id
     return servicios
 }
 

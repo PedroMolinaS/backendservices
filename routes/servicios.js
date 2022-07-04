@@ -1,16 +1,22 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
-const { validarCamposServicio } = require('../middlewares/validarCamposUsuario')
 const { servicioGet, servicioPost, servicioPut, servicioDelete, servicioGetByGroup } = require('../controllers/servicios')
 const { esGrupoValido, servicioExiste, servicioExisteById } = require('../helpers/db-validators')
+const { validarJWT } = require('../middlewares/validar-jwt')
+const { validarCamposServicio } = require('../middlewares/validarCamposUsuario')
 
 const router = Router()
 
-router.get('/', servicioGet)
+router.get('/',[
+    validarJWT
+], servicioGet)
 
-router.get('/:grupo', servicioGetByGroup)
+router.get('/:grupo',[
+    validarJWT
+], servicioGetByGroup)
 
 router.post('/', [
+    validarJWT,
     check('nombre', 'Nombre del servicio es requerido').not().isEmpty(),
     check('descripcion', 'La descripcion es requerida').not().isEmpty(),
     check('grupo').custom(esGrupoValido),
@@ -19,6 +25,7 @@ router.post('/', [
 ], servicioPost)
 
 router.put('/:id',[
+    validarJWT,
     check('id', 'No es un ID de servicio valido').isMongoId(),
     check('id').custom(servicioExisteById),
     check('descripcion', 'La descripcion es requerida').not().isEmpty(),
@@ -27,10 +34,10 @@ router.put('/:id',[
 ], servicioPut)
 
 router.delete('/:id', [
+    validarJWT,
     check('id', 'No es un ID de servicio valido').isMongoId(),
     check('id').custom(servicioExisteById),
     validarCamposServicio
 ], servicioDelete)
-
 
 module.exports = router
