@@ -8,11 +8,6 @@ const servicioGet = async (req = request, res = response) => {
 
     const { limite = 20, desde = 0 } = req.query
 
-    // const servicios = await Servicio.find({ estado: true })
-    //     .skip(Number(desde))
-    //     .limit(Number(limite))
-    // const total = await Servicio.countDocuments({ estado: true })
-
     const [total, servicios] = await Promise.all([
         Servicio.countDocuments({ estado: true }),
         Servicio.find({ estado: true })
@@ -31,10 +26,6 @@ const servicioGetByGroup = async (req = request, res = response) => {
 
     const { limite = 20, desde = 0 } = req.query
     const { grupo } = req.params
-    // const servicios = await Servicio.find({ grupo, estado: true })
-    //     .skip(Number(desde))
-    //     .limit(Number(limite))
-    // const total = await Servicio.countDocuments({ grupo, estado: true })
 
     const [total, servicios] = await Promise.all([
         Servicio.countDocuments({ grupo, estado: true }),

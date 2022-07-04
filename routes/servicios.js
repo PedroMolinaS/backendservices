@@ -7,13 +7,9 @@ const { validarCamposServicio } = require('../middlewares/validarCamposUsuario')
 
 const router = Router()
 
-router.get('/',[
-    validarJWT
-], servicioGet)
+router.get('/', servicioGet)
 
-router.get('/:grupo',[
-    validarJWT
-], servicioGetByGroup)
+router.get('/:grupo', servicioGetByGroup)
 
 router.post('/', [
     validarJWT,
