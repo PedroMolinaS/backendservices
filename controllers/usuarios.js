@@ -13,6 +13,17 @@ const usuariosGet = async (req, res = response) => {
     })
 }
 
+const usuarioGetById = async (req, res = response) => {
+
+    const usuario = await Usuario.findById(req.usuario._id)
+
+    res.status(200).json({
+        ok: true,
+        msg: 'es un GET',
+        usuario
+    })
+}
+
 const usuariosPost = async (req, res = response) => {
 
     const {nombre, correo,password, rol, google = false} = req.body
@@ -79,6 +90,7 @@ const usuariosDelete = async (req, res = response) => {
 
 module.exports = {
     usuariosGet,
+    usuarioGetById,
     usuariosPost,
     usuariosPut,
     usuariosDelete

@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete } = require('../controllers/usuarios')
+const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete, usuarioGetById } = require('../controllers/usuarios')
 const { check } = require('express-validator')
 const { esRolValido, emailExiste, existeUsuarioById } = require('../helpers/db-validators')
 
@@ -10,6 +10,11 @@ const { esAdminRole, tieneRole } = require('../middlewares/validar-roles')
 const router = Router()
 
 router.get('/', usuariosGet)
+
+router.get('/user', [
+    validarJWT,
+    validarCamposUsuario
+],usuarioGetById)
 
 router.post('/', [
     check('correo', 'Email invalido').isEmail(),
