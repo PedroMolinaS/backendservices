@@ -4,6 +4,7 @@ const Usuario = require('../models/usuario')
 
 const usuariosGet = async (req, res = response) => {
 
+    console.log('prueba usuariosGet')
     const usuario = await Usuario.find()
 
     res.status(200).json({
