@@ -1,8 +1,5 @@
 const { response } = require('express')
 const Servicio = require('../models/servicio')
-// const Role = require('../models/role')
-// const {validationResult} = require('express-validator')
-// const bcryptjs = require('bcryptjs')
 
 const servicioGet = async (req = request, res = response) => {
 

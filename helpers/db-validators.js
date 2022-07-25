@@ -46,6 +46,22 @@ const servicioExisteById = async (id) => {
     }
 }
 
+const customerExiste = async (dni) => {
+    const existeCustomer = await Customer.findOne({ dni: dni, estado:true })
+    // console.log({existeNombre})
+    if (existeCustomer) {
+        throw new Error('El servicio ya existe')
+    }
+}
+
+
+const existeCustomerById = async (id) => {
+    existeCustomer = await Customer.findById(id)
+    if (!existeCustomer) {
+        throw new Error('Cliente inválido')
+    }
+}
+
 
 module.exports = {
     esRolValido,
@@ -53,5 +69,7 @@ module.exports = {
     existeUsuarioById,
     esGrupoValido,
     servicioExiste,
-    servicioExisteById
+    servicioExisteById,
+    existeCustomerById,
+    customerExiste
 }

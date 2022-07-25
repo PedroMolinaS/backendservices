@@ -10,6 +10,7 @@ class Server {
         this.servicioPath = '/api/services'
         this.usuarioPath = '/api/usuarios'
         this.authPath = '/api/auth'
+        this.customerPath = '/api/customer'
         this.conectarDB()
         this.middlewares()
         this.routes()
@@ -31,6 +32,7 @@ class Server {
 
     routes() {
         this.app.use(this.authPath, require('../routes/auth'))
+        this.app.use(this.customerPath, require('../routes/customer'))
         this.app.use(this.servicioPath, require('../routes/servicios'))
         this.app.use(this.usuarioPath, require('../routes/usuarios'))
     }

@@ -19,8 +19,28 @@ const generarJWT = (uid = '') => {
         })
     })
 }
+const generarJWTcustomer = (uid = '', nombre, placa, dni) => {
+
+    return new Promise((resolve, reject) => {
+
+        // Armo los datos de JWT que se enviarán
+        const payload = { uid, nombre, placa, dni }
+
+        jwt.sign(payload, process.env.SECRETORPRIVATEKEY, {
+            expiresIn: '365d'
+        }, (err, token) => {
+            if(err){
+                console.log(err)
+                reject('No se pudo generar el token')
+            }else{
+                resolve(token)
+            }
+        })
+    })
+}
 
 
 module.exports = {
-    generarJWT
+    generarJWT,
+    generarJWTcustomer
 }
